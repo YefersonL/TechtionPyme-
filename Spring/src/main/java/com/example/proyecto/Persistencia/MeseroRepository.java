@@ -1,6 +1,7 @@
-package com.example.proyecto.LogicaDeNegocio;
+package com.example.proyecto.Persistencia;
 
 
+import com.example.proyecto.Persistencia.EmpleadoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository

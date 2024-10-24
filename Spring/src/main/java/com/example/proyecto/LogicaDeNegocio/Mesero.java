@@ -1,5 +1,6 @@
 package com.example.proyecto.LogicaDeNegocio;
 
+import com.example.proyecto.LogicaDeNegocio.Empleado;
 import jakarta.persistence.*;
 
 @Entity

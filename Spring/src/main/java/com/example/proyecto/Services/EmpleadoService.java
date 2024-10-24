@@ -1,19 +1,25 @@
-package com.example.proyecto.LogicaDeNegocio;
+package com.example.proyecto.Services;
 
+import com.example.proyecto.LogicaDeNegocio.Empleado;
+import com.example.proyecto.LogicaDeNegocio.Mesero;
+import com.example.proyecto.Persistencia.EmpleadoRepository;
 import java.util.ArrayList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-@RestController
-@RequestMapping("/Empleados")
-public class EmpleadoControlador {
-    @Autowired
-    private EmpleadoRepository empleadoRepository;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
+@Service
+public class EmpleadoService {
+   @Autowired
+    private EmpleadoRepository empleadoRepository;
+    
     @PostMapping
     public ResponseEntity<Map<String, String>> createEmpleado(@RequestBody Map<String, Object> empleadoData) {
         Map<String, String> response = new HashMap<>();
@@ -56,7 +62,7 @@ public class EmpleadoControlador {
         }
     }
 
-    private void validarDatosRequeridos(Map<String, Object> datos) {
+   private void validarDatosRequeridos(Map<String, Object> datos) {
         List<String> camposFaltantes = new ArrayList<>();
         
         if (!datos.containsKey("nombre") || datos.get("nombre") == null) {
@@ -82,6 +88,48 @@ public class EmpleadoControlador {
         return mesero;
     }
 
+    public List<Empleado> getAllEmpleados() {
+        return empleadoRepository.findAll();
+    }
+
+    public Map<String, String> updateEmpleado(Long id, Map<String, Object> empleadoData) {
+        Map<String, String> response = new HashMap<>();
+        return empleadoRepository.findById(id)
+                .map(empleado -> {
+                    actualizarEmpleado(empleado, empleadoData);
+                    empleadoRepository.save(empleado);
+                    response.put("message", "Empleado actualizado correctamente");
+                    return response;
+                })
+                .orElseGet(() -> {
+                    response.put("error", "Empleado no encontrado");
+                    return response;
+                });
+    }
+
+    private void actualizarEmpleado(Empleado empleado, Map<String, Object> datos) {
+        if (datos.containsKey("nombre")) {
+            empleado.setNombre(String.valueOf(datos.get("nombre")));
+        }
+        if (datos.containsKey("identificacion")) {
+            empleado.setIdentificacion(parseInteger(datos.get("identificacion")));
+        }
+        if (empleado instanceof Mesero && datos.containsKey("salarioBase")) {
+            ((Mesero) empleado).setSalarioBase(parseDouble(datos.get("salarioBase")));
+        }
+    }
+
+    public Map<String, String> deleteEmpleado(Long id) {
+        Map<String, String> response = new HashMap<>();
+        if (empleadoRepository.existsById(id)) {
+            empleadoRepository.deleteById(id);
+            response.put("message", "Empleado eliminado correctamente");
+        } else {
+            response.put("error", "Empleado no encontrado");
+        }
+        return response;
+    }
+    
     private int parseInteger(Object value) {
         try {
             if (value instanceof Integer) {
@@ -113,82 +161,6 @@ public class EmpleadoControlador {
             throw new IllegalArgumentException("Formato inválido para número decimal: " + value);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("El valor debe ser un número decimal válido");
-        }
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> getEmpleadoById(@PathVariable Long id) {
-        return empleadoRepository.findById(id)
-                .map(empleado -> {
-                    Map<String, Object> response = convertirEmpleadoAMap(empleado);
-                    return ResponseEntity.ok().body(response);
-                })
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-    }
-
-    private Map<String, Object> convertirEmpleadoAMap(Empleado empleado) {
-        Map<String, Object> empleadoMap = new HashMap<>();
-        empleadoMap.put("nombre", empleado.getNombre());
-        empleadoMap.put("identificacion", empleado.getIdentificacion());
-        empleadoMap.put("tipo", empleado.getClass().getSimpleName().toLowerCase());
-
-        if (empleado instanceof Mesero) {
-            empleadoMap.put("salarioBase", ((Mesero) empleado).getSalarioBase());
-        }
-        return empleadoMap;
-    }
-
-    @GetMapping
-    public List<Empleado> getAllEmpleados() {
-        return empleadoRepository.findAll();
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Map<String, String>> updateEmpleado(
-            @PathVariable Long id,
-            @RequestBody Map<String, Object> empleadoData) {
-        Map<String, String> response = new HashMap<>();
-        
-        return empleadoRepository.findById(id)
-                .map(empleado -> {
-                    try {
-                        actualizarEmpleado(empleado, empleadoData);
-                        empleadoRepository.save(empleado);
-                        response.put("message", "Empleado actualizado correctamente");
-                        return ResponseEntity.ok(response);
-                    } catch (IllegalArgumentException e) {
-                        response.put("error", "Error en los datos: " + e.getMessage());
-                        return ResponseEntity.badRequest().body(response);
-                    }
-                })
-                .orElseGet(() -> {
-                    response.put("error", "Empleado no encontrado");
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-                });
-    }
-
-    private void actualizarEmpleado(Empleado empleado, Map<String, Object> datos) {
-        if (datos.containsKey("nombre")) {
-            empleado.setNombre(String.valueOf(datos.get("nombre")));
-        }
-        if (datos.containsKey("identificacion")) {
-            empleado.setIdentificacion(parseInteger(datos.get("identificacion")));
-        }
-        if (empleado instanceof Mesero && datos.containsKey("salarioBase")) {
-            ((Mesero) empleado).setSalarioBase(parseDouble(datos.get("salarioBase")));
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, String>> deleteEmpleado(@PathVariable Long id) {
-        Map<String, String> response = new HashMap<>();
-        if (empleadoRepository.existsById(id)) {
-            empleadoRepository.deleteById(id);
-            response.put("message", "Empleado eliminado correctamente");
-            return ResponseEntity.ok(response);
-        } else {
-            response.put("error", "Empleado no encontrado");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 }
