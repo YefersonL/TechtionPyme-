@@ -2,6 +2,7 @@ package com.example.proyecto.Services;
 
 import com.example.proyecto.LogicaDeNegocio.Empleado;
 import com.example.proyecto.LogicaDeNegocio.Mesero;
+import com.example.proyecto.LogicaDeNegocio.Cocinero;
 import com.example.proyecto.Persistencia.EmpleadoRepository;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,22 +48,27 @@ public class EmpleadoService {
 
     private Empleado crearEmpleadoPorTipo(String tipo, Map<String, Object> datos) {
         // Validar que los datos requeridos estén presentes
-        validarDatosRequeridos(datos);
+        validarDatosRequeridos(datos, tipo);
         
         // Datos comunes para todos los empleados
         String nombre = String.valueOf(datos.get("nombre"));
         int identificacion = parseInteger(datos.get("identificacion"));
+        double salarioBase = parseDouble(datos.get("salarioBase"));
         
         switch (tipo) {
             case "mesero":
-                return crearMesero(nombre, identificacion, datos);
-            // Aquí puedes agregar más casos para otros tipos de empleados en el futuro
+                return crearMesero(nombre, identificacion, salarioBase, datos);
+            
+            case "cocinero":
+                return crearCocinero(nombre, identificacion,salarioBase, datos);
+              
             default:
                 return null;
+                
         }
     }
 
-   private void validarDatosRequeridos(Map<String, Object> datos) {
+   private void validarDatosRequeridos(Map<String, Object> datos, String tipo) {
         List<String> camposFaltantes = new ArrayList<>();
         
         if (!datos.containsKey("nombre") || datos.get("nombre") == null) {
@@ -75,17 +81,34 @@ public class EmpleadoService {
             camposFaltantes.add("salarioBase");
         }
         
+        if ("mesero".equals(tipo) && (!datos.containsKey("turno") || datos.get("turno") == null)) {
+            camposFaltantes.add("turno");
+        }
+        
+        if ("cocinero".equals(tipo) && (!datos.containsKey("especialidad") || datos.get("especialidad") == null)) {
+            camposFaltantes.add("especialidad");
+        }
         if (!camposFaltantes.isEmpty()) {
             throw new IllegalArgumentException("Faltan campos requeridos: " + String.join(", ", camposFaltantes));
         }
     }
 
-    private Mesero crearMesero(String nombre, int identificacion, Map<String, Object> datos) {
+    private Mesero crearMesero(String nombre, int identificacion, double salarioBase, Map<String, Object> datos) {
         Mesero mesero = new Mesero();
         mesero.setNombre(nombre);
         mesero.setIdentificacion(identificacion);
-        mesero.setSalarioBase(parseDouble(datos.get("salarioBase")));
+        mesero.setSalarioBase(salarioBase);
+        mesero.setTurno(String.valueOf(datos.get("turno")));
         return mesero;
+    }
+    
+    private Cocinero crearCocinero(String nombre, int identificacion,double salarioBase, Map<String, Object> datos) {
+        Cocinero cocinero = new Cocinero();
+        cocinero.setNombre(nombre);
+        cocinero.setIdentificacion(identificacion);
+        cocinero.setSalarioBase(salarioBase);
+        cocinero.setEspecialidad(String.valueOf(datos.get("especialidad")));
+        return cocinero;
     }
 
     public List<Empleado> getAllEmpleados() {
@@ -114,9 +137,16 @@ public class EmpleadoService {
         if (datos.containsKey("identificacion")) {
             empleado.setIdentificacion(parseInteger(datos.get("identificacion")));
         }
-        if (empleado instanceof Mesero && datos.containsKey("salarioBase")) {
-            ((Mesero) empleado).setSalarioBase(parseDouble(datos.get("salarioBase")));
+        
+        if (datos.containsKey("salarioBase")) {
+            empleado.setSalarioBase(parseDouble(datos.get("salarioBase")));
         }
+        
+        
+        if (empleado instanceof Cocinero && datos.containsKey("especialidad")) {
+            ((Cocinero) empleado).setEspecialidad("especialidad");
+        }
+        
     }
 
     public Map<String, String> deleteEmpleado(Long id) {
@@ -141,6 +171,7 @@ public class EmpleadoService {
             if (value instanceof Number) {
                 return ((Number) value).intValue();
             }
+            
             throw new IllegalArgumentException("Formato inválido para número entero: " + value);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("El valor debe ser un número entero válido");

@@ -15,26 +15,34 @@ import jakarta.persistence.Table;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 @Table (name = "Empleados")
-public class Empleado {
+public abstract class Empleado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // Campo ID
     
     private String nombre;
     private int identificacion;
+    private double salarioBase;
    
 
-    public Empleado(String nombre, int identificacion) {
+    public Empleado(String nombre, int identificacion, double salarioBase) {
         this.nombre = nombre;
         this.identificacion = identificacion;
+        this.salarioBase = this.salarioBase;
     }
     
     public Empleado() {
        
     }
     
-    public void realizarTarea(){
-        
+    public abstract void realizarTarea();
+
+    public double getSalarioBase() {
+        return salarioBase;
+    }
+
+    public void setSalarioBase(double salarioBase) {
+        this.salarioBase = salarioBase;
     }
     
    

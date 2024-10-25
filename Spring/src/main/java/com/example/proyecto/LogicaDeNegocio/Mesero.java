@@ -7,28 +7,43 @@ import jakarta.persistence.*;
 @DiscriminatorValue("Mesero")
 public class Mesero extends Empleado {  
     
-    @Column(name = "salario_base", nullable = false)
-    private double salarioBase;
- 
-    public Mesero(String nombre, int identificacion, double salarioBase) {
-        super(nombre, identificacion);
-        this.salarioBase = salarioBase;
+    @Column(name = "turno", nullable = true)
+    private String turno;
+    
+  
+    public Mesero(String nombre, int identificacion, double salarioBase, String turno ) {
+        super(nombre, identificacion, salarioBase);
+        this.turno = turno;
     }
     
     public Mesero() {
         super();
     }
 
-    public double getSalarioBase() {
-        return salarioBase;
+    public String getTurno() {
+        return turno;
     }
 
-    public void setSalarioBase(double salarioBase) {
-        this.salarioBase = salarioBase;
+    public void setTurno(String turno) {
+        this.turno = turno;
     }
 
+   
 
+    @Override
     public void realizarTarea() {
         // Implementación específica para mesero
     }
+    
+    public void tomarOrden(){
+        
+    }
+    
+    public void enviarOrdenAcocina(){
+        
+    }
+    
+    
+    
+    
 }
