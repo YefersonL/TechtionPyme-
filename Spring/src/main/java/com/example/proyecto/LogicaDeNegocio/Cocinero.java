@@ -13,12 +13,18 @@ public class Cocinero extends Empleado{
     
     @Column(name = "especialidad", nullable = true)
     private String especialidad;
-    
 
-    public Cocinero(String especialidad, String nombre, int identificacion, double salarioBase) {
-        super(nombre, identificacion, salarioBase);
+    public Cocinero(String especialidad, String nombre, int identificacion, double salarioBase, String contraseña) {
+        super(nombre, identificacion, salarioBase, contraseña);
         this.especialidad = especialidad;
     }
+
+    public Cocinero(String especialidad) {
+        this.especialidad = especialidad;
+    }
+    
+
+    
     public Cocinero() {
         super();
     }

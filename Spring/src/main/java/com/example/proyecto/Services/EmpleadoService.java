@@ -1,9 +1,12 @@
 package com.example.proyecto.Services;
 
+import com.example.proyecto.LogicaDeNegocio.Administrador;
 import com.example.proyecto.LogicaDeNegocio.Empleado;
 import com.example.proyecto.LogicaDeNegocio.Mesero;
 import com.example.proyecto.LogicaDeNegocio.Cocinero;
+import com.example.proyecto.LogicaDeNegocio.Rol;
 import com.example.proyecto.Persistencia.EmpleadoRepository;
+import com.example.proyecto.Persistencia.RolRepository;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,29 +16,47 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class EmpleadoService {
-   @Autowired
+
+    @Autowired
     private EmpleadoRepository empleadoRepository;
-    
+    @Autowired
+    private RolRepository RolRepository;
+
     @PostMapping
-    public ResponseEntity<Map<String, String>> createEmpleado(@RequestBody Map<String, Object> empleadoData) {
+    public ResponseEntity<Map<String, String>> createEmpleado(Map<String, Object> empleadoData) {
         Map<String, String> response = new HashMap<>();
         try {
             String tipo = String.valueOf(empleadoData.get("tipo")).toLowerCase();
+
+            // Crear el empleado basado en el tipo proporcionado
             Empleado empleado = crearEmpleadoPorTipo(tipo, empleadoData);
-            
+
             if (empleado == null) {
-                response.put("error", "Tipo de empleado no válido. Tipos válidos: mesero");
+                response.put("error", "Tipo de empleado no válido. Tipos válidos: mesero, cocinero, administrador.");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
 
+            // Buscar el rol en base al nombre de rol en el map empleadoData
+            String tipoRol = String.valueOf(empleadoData.get("tipoRol")).toLowerCase();
+            Rol rol = RolRepository.findByNombre(tipoRol);
+
+            if (rol == null) {
+                response.put("error", "Rol no válido. Asegúrate de que el rol existe en la base de datos.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+
+            // Asignar el rol al empleado
+            empleado.setRol(rol);
             empleadoRepository.save(empleado);
-            response.put("message", "Empleado agregado correctamente");
+
+            response.put("message", "Empleado agregado correctamente con el rol " + tipoRol);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
         } catch (IllegalArgumentException e) {
             response.put("error", "Error en los datos: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
@@ -49,28 +70,31 @@ public class EmpleadoService {
     private Empleado crearEmpleadoPorTipo(String tipo, Map<String, Object> datos) {
         // Validar que los datos requeridos estén presentes
         validarDatosRequeridos(datos, tipo);
-        
+
         // Datos comunes para todos los empleados
         String nombre = String.valueOf(datos.get("nombre"));
         int identificacion = parseInteger(datos.get("identificacion"));
         double salarioBase = parseDouble(datos.get("salarioBase"));
-        
+
         switch (tipo) {
             case "mesero":
                 return crearMesero(nombre, identificacion, salarioBase, datos);
-            
+
             case "cocinero":
-                return crearCocinero(nombre, identificacion,salarioBase, datos);
-              
+                return crearCocinero(nombre, identificacion, salarioBase, datos);
+
+            case "administrador":
+                return crearAdministrador(nombre, identificacion, salarioBase);
+
             default:
                 return null;
-                
+
         }
     }
 
-   private void validarDatosRequeridos(Map<String, Object> datos, String tipo) {
+    private void validarDatosRequeridos(Map<String, Object> datos, String tipo) {
         List<String> camposFaltantes = new ArrayList<>();
-        
+
         if (!datos.containsKey("nombre") || datos.get("nombre") == null) {
             camposFaltantes.add("nombre");
         }
@@ -80,11 +104,11 @@ public class EmpleadoService {
         if (!datos.containsKey("salarioBase") || datos.get("salarioBase") == null) {
             camposFaltantes.add("salarioBase");
         }
-        
+
         if ("mesero".equals(tipo) && (!datos.containsKey("turno") || datos.get("turno") == null)) {
             camposFaltantes.add("turno");
         }
-        
+
         if ("cocinero".equals(tipo) && (!datos.containsKey("especialidad") || datos.get("especialidad") == null)) {
             camposFaltantes.add("especialidad");
         }
@@ -101,14 +125,22 @@ public class EmpleadoService {
         mesero.setTurno(String.valueOf(datos.get("turno")));
         return mesero;
     }
-    
-    private Cocinero crearCocinero(String nombre, int identificacion,double salarioBase, Map<String, Object> datos) {
+
+    private Cocinero crearCocinero(String nombre, int identificacion, double salarioBase, Map<String, Object> datos) {
         Cocinero cocinero = new Cocinero();
         cocinero.setNombre(nombre);
         cocinero.setIdentificacion(identificacion);
         cocinero.setSalarioBase(salarioBase);
         cocinero.setEspecialidad(String.valueOf(datos.get("especialidad")));
         return cocinero;
+    }
+
+    private Administrador crearAdministrador(String nombre, int identificacion, double salarioBase) {
+        Administrador administrador = new Administrador();
+        administrador.setNombre(nombre);
+        administrador.setIdentificacion(identificacion);
+        administrador.setSalarioBase(salarioBase);
+        return administrador;
     }
 
     public List<Empleado> getAllEmpleados() {
@@ -137,16 +169,15 @@ public class EmpleadoService {
         if (datos.containsKey("identificacion")) {
             empleado.setIdentificacion(parseInteger(datos.get("identificacion")));
         }
-        
+
         if (datos.containsKey("salarioBase")) {
             empleado.setSalarioBase(parseDouble(datos.get("salarioBase")));
         }
-        
-        
+
         if (empleado instanceof Cocinero && datos.containsKey("especialidad")) {
             ((Cocinero) empleado).setEspecialidad("especialidad");
         }
-        
+
     }
 
     public Map<String, String> deleteEmpleado(Long id) {
@@ -159,7 +190,7 @@ public class EmpleadoService {
         }
         return response;
     }
-    
+
     private int parseInteger(Object value) {
         try {
             if (value instanceof Integer) {
@@ -171,7 +202,7 @@ public class EmpleadoService {
             if (value instanceof Number) {
                 return ((Number) value).intValue();
             }
-            
+
             throw new IllegalArgumentException("Formato inválido para número entero: " + value);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("El valor debe ser un número entero válido");

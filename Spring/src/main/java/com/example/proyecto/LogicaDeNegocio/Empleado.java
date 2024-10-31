@@ -9,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,17 +25,50 @@ public abstract class Empleado {
     private String nombre;
     private int identificacion;
     private double salarioBase;
+    private String contraseña; // Atributo de contraseña
+    
+    @ManyToOne
+    @JoinColumn(name = "rol_id", nullable = false)
+    private Rol rol;
    
 
-    public Empleado(String nombre, int identificacion, double salarioBase) {
+    public Empleado(String nombre, int identificacion, double salarioBase,String contraseña ) {
         this.nombre = nombre;
         this.identificacion = identificacion;
         this.salarioBase = this.salarioBase;
+        this.contraseña = contraseña;
     }
     
     public Empleado() {
        
     }
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getContraseña() {
+        return contraseña;
+    }
+
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
+    }
+    
+    
+    
     
     public abstract void realizarTarea();
 
