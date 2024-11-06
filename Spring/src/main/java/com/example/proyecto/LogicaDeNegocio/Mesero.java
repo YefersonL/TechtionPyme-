@@ -10,10 +10,7 @@ public class Mesero extends Empleado {
     @Column(name = "turno", nullable = true)
     private String turno;
 
-    public Mesero(String turno, String nombre, int identificacion, double salarioBase, String contraseña) {
-        super(nombre, identificacion, salarioBase, contraseña);
-        this.turno = turno;
-    }
+    
 
     public Mesero(String turno) {
         this.turno = turno;

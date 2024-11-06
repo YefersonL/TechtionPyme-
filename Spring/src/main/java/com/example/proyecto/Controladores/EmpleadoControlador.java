@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 @RestController
-@RequestMapping("/Empleados/administrador")
+@RequestMapping("/Empleados")
 public class EmpleadoControlador {
     @Autowired
     private EmpleadoService empleadoService;
 
     @PostMapping
     public ResponseEntity<Map<String, String>> createEmpleado(@RequestBody Map<String, Object> empleadoData) {
+        System.out.println("Conectado");
         return empleadoService.createEmpleado(empleadoData);
     }
 

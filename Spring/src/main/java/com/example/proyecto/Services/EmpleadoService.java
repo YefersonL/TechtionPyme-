@@ -4,30 +4,28 @@ import com.example.proyecto.LogicaDeNegocio.Administrador;
 import com.example.proyecto.LogicaDeNegocio.Empleado;
 import com.example.proyecto.LogicaDeNegocio.Mesero;
 import com.example.proyecto.LogicaDeNegocio.Cocinero;
-import com.example.proyecto.LogicaDeNegocio.Rol;
 import com.example.proyecto.Persistencia.EmpleadoRepository;
-import com.example.proyecto.Persistencia.RolRepository;
-import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import org.springframework.web.bind.annotation.PostMapping;
 
 @Service
 public class EmpleadoService {
 
     @Autowired
     private EmpleadoRepository empleadoRepository;
-    @Autowired
-    private RolRepository RolRepository;
 
-    @PostMapping
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    
+    
+
+    // Método para registrar un empleado
     public ResponseEntity<Map<String, String>> createEmpleado(Map<String, Object> empleadoData) {
         Map<String, String> response = new HashMap<>();
         try {
@@ -41,20 +39,10 @@ public class EmpleadoService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
 
-            // Buscar el rol en base al nombre de rol en el map empleadoData
-            String tipoRol = String.valueOf(empleadoData.get("tipoRol")).toLowerCase();
-            Rol rol = RolRepository.findByNombre(tipoRol);
-
-            if (rol == null) {
-                response.put("error", "Rol no válido. Asegúrate de que el rol existe en la base de datos.");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-            }
-
-            // Asignar el rol al empleado
-            empleado.setRol(rol);
+            // Hashear la contraseña antes de almacenarla
+            empleado.setPassword(passwordEncoder.encode(String.valueOf(empleadoData.get("password"))));
             empleadoRepository.save(empleado);
 
-            response.put("message", "Empleado agregado correctamente con el rol " + tipoRol);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
         } catch (IllegalArgumentException e) {
@@ -66,6 +54,17 @@ public class EmpleadoService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
+    // Método para autenticar un empleado
+    public Empleado autenticarEmpleado(String nombre, String password) {
+        Empleado empleado = empleadoRepository.findByNombre(nombre);
+        if (empleado != null && passwordEncoder.matches(password, empleado.getPassword())) {
+            return empleado;
+        }
+        return null;
+    }
+
+    // Resto de métodos (crearEmpleadoPorTipo, validarDatosRequeridos, etc.) permanecen igual...
 
     private Empleado crearEmpleadoPorTipo(String tipo, Map<String, Object> datos) {
         // Validar que los datos requeridos estén presentes
@@ -79,16 +78,12 @@ public class EmpleadoService {
         switch (tipo) {
             case "mesero":
                 return crearMesero(nombre, identificacion, salarioBase, datos);
-
             case "cocinero":
                 return crearCocinero(nombre, identificacion, salarioBase, datos);
-
             case "administrador":
                 return crearAdministrador(nombre, identificacion, salarioBase);
-
             default:
                 return null;
-
         }
     }
 

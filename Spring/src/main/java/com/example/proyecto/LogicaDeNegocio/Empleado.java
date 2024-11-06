@@ -9,14 +9,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
-@Table (name = "Empleados")
+@Table (name = "empleados")
 public abstract class Empleado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,31 +24,32 @@ public abstract class Empleado {
     private String nombre;
     private int identificacion;
     private double salarioBase;
-    private String contraseña; // Atributo de contraseña
-    
-    @ManyToOne
-    @JoinColumn(name = "rol_id", nullable = false)
-    private Rol rol;
-   
+    private String password; // Atributo de password
+    private String tipo;
 
-    public Empleado(String nombre, int identificacion, double salarioBase,String contraseña ) {
+    public Empleado(Long id, String nombre, int identificacion, double salarioBase, String password, String tipo) {
+        this.id = id;
         this.nombre = nombre;
         this.identificacion = identificacion;
-        this.salarioBase = this.salarioBase;
-        this.contraseña = contraseña;
+        this.salarioBase = salarioBase;
+        this.password = password;
+        this.tipo = tipo;
     }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+    
+    
     
     public Empleado() {
        
     }
 
-    public Rol getRol() {
-        return rol;
-    }
-
-    public void setRol(Rol rol) {
-        this.rol = rol;
-    }
 
     public Long getId() {
         return id;
@@ -59,12 +59,12 @@ public abstract class Empleado {
         this.id = id;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getPassword() {
+        return password;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setPassword(String password) {
+        this.password = password;
     }
     
     
