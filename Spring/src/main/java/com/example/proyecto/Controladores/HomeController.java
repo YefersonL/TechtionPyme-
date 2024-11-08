@@ -25,7 +25,7 @@ public class HomeController {
     }
     
     @GetMapping("/admin")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String admin(){
         return "private home";
     }

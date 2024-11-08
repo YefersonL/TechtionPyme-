@@ -10,16 +10,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
 import lombok.NoArgsConstructor;
+
 
 /**
  *
  * @author USUARIO
  */
 @Entity
-@Table(name = "user")
-@AllArgsConstructor
-@NoArgsConstructor
+@Table(name = "username")
+@NoArgsConstructor          // Constructor sin argumentos
+@AllArgsConstructor         // Constructor con todos los argumentos
 @Data
 public class User {
     
@@ -29,5 +31,11 @@ public class User {
     private String username;
     private String password;
     private String role;
+
+  
+    
+    
+    
+    
     
 }
