@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .loginPage("/login")  // Ruta de la página de inicio de sesión personalizada
                 .usernameParameter("nombre") // Cambia el nombre del parámetro de usuario a "nombre"
                 .passwordParameter("password") // Asegúrate de que el nombre del parámetro de contraseña sea "password"
-                .defaultSuccessUrl("/Empleados", true) // Redirigir a la página de inicio después de un inicio de sesión exitoso
+                .defaultSuccessUrl("/empleados", true) // Redirigir a la página de inicio después de un inicio de sesión exitoso
                 .failureUrl("/login?error=true") // Redirigir a la página de inicio de sesión con un error si la autenticación falla
                 .permitAll()          // Permitir el acceso a todos al formulario de inicio de sesión
             )

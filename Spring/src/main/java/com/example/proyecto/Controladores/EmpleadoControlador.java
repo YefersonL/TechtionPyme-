@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 @RestController
-@RequestMapping("/Empleados")
+@RequestMapping("/empleados")
 public class EmpleadoControlador {
     @Autowired
     private EmpleadoService empleadoService;
