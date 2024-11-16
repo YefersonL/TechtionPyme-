@@ -4,33 +4,23 @@ package com.example.proyecto.LogicaDeNegocio;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Entity
 @DiscriminatorValue("cocinero")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Cocinero extends Empleado{
     
     @Column(name = "especialidad", nullable = true)
     private String especialidad;
     
 
-    public Cocinero(String especialidad, String nombre, int identificacion, double salarioBase) {
-        super(nombre, identificacion, salarioBase);
-        this.especialidad = especialidad;
-    }
-    public Cocinero() {
-        super();
-    }
 
-    public String getEspecialidad() {
-        return especialidad;
-    }
-
-    public void setEspecialidad(String especialidad) {
-        this.especialidad = especialidad;
-    }
-    
     public void visualizarPedidos(){
         
     }

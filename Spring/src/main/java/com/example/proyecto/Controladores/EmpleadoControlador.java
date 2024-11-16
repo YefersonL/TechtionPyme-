@@ -7,21 +7,28 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
 @RestController
-@RequestMapping("/Empleados")
+@RequestMapping("/empleados")
 public class EmpleadoControlador {
     @Autowired
     private EmpleadoService empleadoService;
 
-    @PostMapping
+    @PostMapping("/create")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Map<String, String>> createEmpleado(@RequestBody Map<String, Object> empleadoData) {
-        return empleadoService.createEmpleado(empleadoData);
+        // Llamada al servicio para crear el empleado
+        Map<String, String> response = (Map<String, String>) empleadoService.createEmpleado(empleadoData);
+
+        // Verifica si la creación fue exitosa o si hubo algún error
+        if (response.containsKey("error")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response); // Si hay error
+        }
+
+        // Si la creación es exitosa, responde con una creación exitosa
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
@@ -30,6 +37,7 @@ public class EmpleadoControlador {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, String>> updateEmpleado(@PathVariable Long id, @RequestBody Map<String, Object> empleadoData) {
         Map<String, String> response = empleadoService.updateEmpleado(id, empleadoData);
         if (response.containsKey("error")) {
@@ -39,6 +47,7 @@ public class EmpleadoControlador {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, String>> deleteEmpleado(@PathVariable Long id) {
         Map<String, String> response = empleadoService.deleteEmpleado(id);
         if (response.containsKey("error")) {
