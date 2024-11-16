@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 public abstract class Empleado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Campo ID
+    private int id; // Campo ID
     
     private String nombre;
     private int identificacion;

@@ -1,10 +1,9 @@
 package com.example.proyecto.Persistencia;
 
 
-import com.example.proyecto.Persistencia.EmpleadoRepository;
-import org.springframework.stereotype.Repository;
+import com.example.proyecto.LogicaDeNegocio.Mesero;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public interface MeseroRepository extends EmpleadoRepository {
-    // Aquí puedes agregar métodos específicos para manejar meseros si es necesario
+public interface MeseroRepository extends JpaRepository<Mesero, Long> {
+    
 }
