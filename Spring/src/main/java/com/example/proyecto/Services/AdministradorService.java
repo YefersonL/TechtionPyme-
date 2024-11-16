@@ -1,15 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.example.proyecto.Services;
 
 import com.example.proyecto.LogicaDeNegocio.Administrador;
 import com.example.proyecto.LogicaDeNegocio.Factura;
 import com.example.proyecto.LogicaDeNegocio.Pedido;
 import com.example.proyecto.Persistencia.AdministradorRepository;
-//import com.example.proyecto.Repositorios.FacturaRepository;
-//import com.example.proyecto.Repositorios.PedidoRepository;
+import com.example.proyecto.Persistencia.FacturaRepository;
+import com.example.proyecto.Persistencia.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +18,11 @@ public class AdministradorService {
     @Autowired
     private AdministradorRepository administradorRepository;
 
-    /*@Autowired
+    @Autowired
     private PedidoRepository pedidoRepository;
 
     @Autowired
-    private FacturaRepository facturaRepository;*/
+    private FacturaRepository facturaRepository;
 
     // Obtener un administrador por ID
     public Administrador obtenerAdministradorPorId(Long id) {
