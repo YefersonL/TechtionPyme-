@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @DiscriminatorValue("Mesero")
 @Data
@@ -16,19 +18,7 @@ public class Mesero extends Empleado {
     
     @Column(name = "turno", nullable = true)
     private String turno;
-    
-  
 
-    
-=======
-import java.util.List;
-
-@Entity
-@DiscriminatorValue("Mesero")
-public class Mesero extends Empleado {
-
-    @Column(name = "turno", nullable = true)
-    private String turno;
 
     @OneToMany(mappedBy = "mesero", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pedido> pedidos; // Relación con los pedidos asignados al mesero
@@ -40,10 +30,6 @@ public class Mesero extends Empleado {
         super(nombre, identificacion, salarioBase);
         this.turno = turno;
     }
->>>>>>> 103b3757c2bab874c66fd8d92c42dd720bfd5722
-
-
-
 
     public List<Pedido> getPedidos() {
         return pedidos;

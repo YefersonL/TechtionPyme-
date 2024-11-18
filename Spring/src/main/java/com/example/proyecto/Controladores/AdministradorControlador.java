@@ -13,36 +13,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/administradores")
-public class AdministradorControlador {
+public class AdministradorControlador extends EmpleadoControlador {
 
-    @Autowired
-    private AdministradorService administradorService;
 
-    @PostMapping
-    public ResponseEntity<Map<String, String>> createAdministrador(@RequestBody Map<String, Object> administradorData) {
-        return administradorService.createAdministrador(administradorData);
-    }
 
-    @GetMapping
-    public List<Administrador> getAllAdministradores() {
-        return administradorService.getAllAdministradores();
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Map<String, String>> updateAdministrador(@PathVariable Long id, @RequestBody Map<String, Object> administradorData) {
-        Map<String, String> response = administradorService.updateAdministrador(id, administradorData);
-        if (response.containsKey("error")) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
-        return ResponseEntity.ok(response);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, String>> deleteAdministrador(@PathVariable Long id) {
-        Map<String, String> response = administradorService.deleteAdministrador(id);
-        if (response.containsKey("error")) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
-        return ResponseEntity.ok(response);
-    }
 }

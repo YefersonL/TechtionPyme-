@@ -29,10 +29,10 @@ public abstract class Empleado {
     private String nombre;
     private int identificacion;
     private double salarioBase;
-   
 
 
-    
+
+
     public abstract void realizarTarea();
 
 
