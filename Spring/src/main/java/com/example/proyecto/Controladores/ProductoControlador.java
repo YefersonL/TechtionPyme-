@@ -4,8 +4,8 @@
  */
 package com.example.proyecto.Controladores;
 
-import com.example.proyecto.LogicaDeNegocio.Producto;
-import com.example.proyecto.Services.ProductoService;
+import com.example.proyecto.LogicaDeNegocio.ProductoInventario;
+import com.example.proyecto.Services.ProductoInventarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,35 +18,35 @@ import java.util.List;
 public class ProductoControlador {
 
     @Autowired
-    private ProductoService productoService;
+    private ProductoInventarioService productoInventarioService;
 
     // Crear producto
     @PostMapping
-    public ResponseEntity<Producto> createProducto(@RequestBody Producto producto) {
-        Producto nuevoProducto = productoService.createProducto(producto);
-        return new ResponseEntity<>(nuevoProducto, HttpStatus.CREATED);
+    public ResponseEntity<ProductoInventario> createProducto(@RequestBody ProductoInventario producto) {
+        ProductoInventario nuevoProductoInventario = productoInventarioService.createProducto(producto);
+        return new ResponseEntity<>(nuevoProductoInventario, HttpStatus.CREATED);
     }
 
     // Obtener todos los productos
     @GetMapping
-    public ResponseEntity<List<Producto>> getAllProductos() {
-        List<Producto> productos = productoService.getAllProductos();
+    public ResponseEntity<List<ProductoInventario>> getAllProductos() {
+        List<ProductoInventario> productos = productoInventarioService.getAllProductos();
         return new ResponseEntity<>(productos, HttpStatus.OK);
     }
 
     // Obtener producto por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Producto> getProductoById(@PathVariable Long id) {
-        return productoService.getProductoById(id)
+    public ResponseEntity<ProductoInventario> getProductoById(@PathVariable Long id) {
+        return productoInventarioService.getProductoById(id)
                 .map(producto -> new ResponseEntity<>(producto, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     // Actualizar producto
     @PutMapping("/{id}")
-    public ResponseEntity<Producto> updateProducto(@PathVariable Long id, @RequestBody Producto producto) {
+    public ResponseEntity<ProductoInventario> updateProducto(@PathVariable Long id, @RequestBody ProductoInventario producto) {
         try {
-            Producto productoActualizado = productoService.updateProducto(id, producto);
+            ProductoInventario productoActualizado = productoInventarioService.updateProducto(id, producto);
             return new ResponseEntity<>(productoActualizado, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -57,7 +57,7 @@ public class ProductoControlador {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProducto(@PathVariable Long id) {
         try {
-            productoService.deleteProducto(id);
+            productoInventarioService.deleteProducto(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -1,7 +1,4 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.example.proyecto.Services;
 
 import com.example.proyecto.LogicaDeNegocio.Mesero;
@@ -23,4 +20,7 @@ public class MeseroService {
                 .orElseThrow(() -> new RuntimeException("Mesero no encontrado"));
         return mesero.getPedidos();
     }
+
+
 }
+*/

@@ -15,12 +15,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+
 @DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 @Table (name = "Empleados")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Empleado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -9,38 +9,26 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class Proveedor {
-    
+@Table(name = "Productos")
+public class ProductoInventario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
+    private Long id; // Asegúrate de que existe este campo.
+
     @Column(nullable = false)
     private String nombre;
 
-    @OneToMany
-    private List<ProductoInventario> productosDisponibles;
+    @Column(nullable = false)
+    private double precio;
 
-    public void listarProductos() {
-        // Lógica para listar productos
-    }
+    @Column(nullable = false)
+    private int cantidad;
 
-    public void actualizarPrecio(ProductoInventario producto, double nuevoPrecio) {
-        // Lógica para actualizar precio
-    }
 
-    public void gestionarPedidosProveedor() {
-        // Lógica para gestionar pedidos con el proveedor
-    }
-
-    public void mostrarInfoProveedor() {
-        // Lógica para mostrar información del proveedor
-    }
 }

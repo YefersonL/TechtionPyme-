@@ -2,9 +2,17 @@
 package com.example.proyecto.LogicaDeNegocio;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Factura {
 
     @Id
@@ -17,39 +25,8 @@ public class Factura {
     @Column(nullable = false)
     private double montoTotal;
 
-    // Constructores
-    public Factura(LocalDateTime fecha, double montoTotal) {
-        this.fecha = fecha;
-        this.montoTotal = montoTotal;
-    }
 
-    public Factura() {
-    }
 
-    // Getters y Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(LocalDateTime fecha) {
-        this.fecha = fecha;
-    }
-
-    public double getMontoTotal() {
-        return montoTotal;
-    }
-
-    public void setMontoTotal(double montoTotal) {
-        this.montoTotal = montoTotal;
-    }
 
     // Método para calcular el total (puedes añadir lógica específica aquí)
     public void calcularTotal(double... items) {

@@ -5,9 +5,17 @@
 package com.example.proyecto.LogicaDeNegocio;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Finanzas {
     
     @Id
@@ -18,43 +26,11 @@ public class Finanzas {
     private List<Factura> facturas;
 
     @OneToMany
-    private List<Producto> productos;
+    private List<ProductoInventario> productos;
 
     @Column
     private double pasivo;
 
-    public Finanzas(List<Factura> facturas, List<Producto> productos, double pasivo) {
-        this.facturas = facturas;
-        this.productos = productos;
-        this.pasivo = pasivo;
-    }
-
-    public Finanzas() {
-    }
-
-    public List<Factura> getFacturas() {
-        return facturas;
-    }
-
-    public void setFacturas(List<Factura> facturas) {
-        this.facturas = facturas;
-    }
-
-    public List<Producto> getProductos() {
-        return productos;
-    }
-
-    public void setProductos(List<Producto> productos) {
-        this.productos = productos;
-    }
-
-    public double getPasivo() {
-        return pasivo;
-    }
-
-    public void setPasivo(double pasivo) {
-        this.pasivo = pasivo;
-    }
 
     public void generarBalance() {
         // Lógica para generar balance de finanzas

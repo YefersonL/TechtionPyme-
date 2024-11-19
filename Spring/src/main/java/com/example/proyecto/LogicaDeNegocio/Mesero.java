@@ -2,7 +2,6 @@ package com.example.proyecto.LogicaDeNegocio;
 
 import com.example.proyecto.LogicaDeNegocio.Empleado;
 import jakarta.persistence.*;
-<<<<<<< HEAD
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,22 +21,6 @@ public class Mesero extends Empleado {
 
     @OneToMany(mappedBy = "mesero", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pedido> pedidos; // Relación con los pedidos asignados al mesero
-
-    public Mesero() {
-    }
-
-    public Mesero(String nombre, int identificacion, double salarioBase, String turno) {
-        super(nombre, identificacion, salarioBase);
-        this.turno = turno;
-    }
-
-    public List<Pedido> getPedidos() {
-        return pedidos;
-    }
-
-    public void setPedidos(List<Pedido> pedidos) {
-        this.pedidos = pedidos;
-    }
 
     @Override
     public void realizarTarea() {

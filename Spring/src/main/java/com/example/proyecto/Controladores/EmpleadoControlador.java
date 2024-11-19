@@ -17,7 +17,7 @@ public class EmpleadoControlador {
     private EmpleadoService empleadoService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Map<String, String>> createEmpleado(@RequestBody Map<String, Object> empleadoData) {
         // Llamada al servicio para crear el empleado
         Map<String, String> response = (Map<String, String>) empleadoService.createEmpleado(empleadoData);

@@ -5,8 +5,15 @@
 package com.example.proyecto.LogicaDeNegocio;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "Pedidos")
 public class Pedido {
 
@@ -25,48 +32,11 @@ public class Pedido {
     @JoinColumn(name = "cocinero_id", nullable = true)
     private Cocinero cocinero; // Relación con el cocinero asignado al pedido
 
-    public Pedido() {
-    }
+
 
     public Pedido(String descripcion, Mesero mesero) {
         this.descripcion = descripcion;
         this.mesero = mesero;
         this.estado = "EN_ESPERA";
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public Mesero getMesero() {
-        return mesero;
-    }
-
-    public void setMesero(Mesero mesero) {
-        this.mesero = mesero;
-    }
-
-    public Cocinero getCocinero() {
-        return cocinero;
-    }
-
-    public void setCocinero(Cocinero cocinero) {
-        this.cocinero = cocinero;
     }
 }

@@ -5,9 +5,17 @@
 package com.example.proyecto.LogicaDeNegocio;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Restaurante {
     
     @Id
@@ -26,49 +34,9 @@ public class Restaurante {
     @OneToMany
     private List<Pedido> pedidos;
 
-    public Restaurante(String nombre, List<Empleado> empleados, List<Proveedor> proveedores, List<Pedido> pedidos) {
-        this.nombre = nombre;
-        this.empleados = empleados;
-        this.proveedores = proveedores;
-        this.pedidos = pedidos;
-    }
 
-    public Restaurante() {
-    }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public List<Empleado> getEmpleados() {
-        return empleados;
-    }
-
-    public void setEmpleados(List<Empleado> empleados) {
-        this.empleados = empleados;
-    }
-
-    public List<Proveedor> getProveedores() {
-        return proveedores;
-    }
-
-    public void setProveedores(List<Proveedor> proveedores) {
-        this.proveedores = proveedores;
-    }
-
-    public List<Pedido> getPedidos() {
-        return pedidos;
-    }
-
-    public void setPedidos(List<Pedido> pedidos) {
-        this.pedidos = pedidos;
-    }
-
-    public void realizarPedido(Producto producto, int cantidad) {
+    public void realizarPedido(ProductoInventario producto, int cantidad) {
         // Lógica para realizar pedido
     }
 
