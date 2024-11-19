@@ -33,9 +33,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/public/**").permitAll()
-                        .requestMatchers("/v1/home").authenticated()
-                        .requestMatchers("/v1/register").hasAnyAuthority("ADMIN") // Solo ADMIN puede acceder al registro
-                        .requestMatchers("/v1/login").permitAll() // Solo ADMIN puede acceder al registro
+                        .requestMatchers("/home").authenticated()
+                        .requestMatchers("/create").hasAnyAuthority("ADMIN") // Solo ADMIN puede acceder al registro
+                        .requestMatchers("/login").permitAll() // Solo ADMIN puede acceder al registro
                         .requestMatchers("/static/**", "/public/**", "/resources/**").permitAll()  // Asegúrate de que las rutas a los recursos estáticos están permitidas
                         .anyRequest().authenticated())
                 /*.headers(headers -> headers
@@ -55,7 +55,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
         configuration.setAllowCredentials(true);

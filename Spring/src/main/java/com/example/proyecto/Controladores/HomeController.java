@@ -23,36 +23,41 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class HomeController {
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;  // Codificador de contraseñas
+
+    /**
+     * Endpoint para mostrar el home privado
+     */
     @GetMapping("/home")
     public String home() {
         return "private home";
     }
 
-
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;  // Inyecta el PasswordEncoder
-
-
+    /**
+     * Endpoint para iniciar sesión
+     * @param username Nombre de usuario
+     * @param password Contraseña
+     * @return Respuesta con token y redirección, o un error
+     */
     @GetMapping("/login")
     public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
-        // Busca el usuario por el nombre de usuario
+        // Busca el usuario por su nombre
         User user = userRepository.findUserByUsername(username);
 
         if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-            // Verifica que el rol sea ADMIN
             if ("ADMIN".equals(user.getRole())) {
-                // Genera un token (en producción usarías una librería como JWT)
-                String token = generateToken(user);  // Método para generar un token (JWT o similar)
+                // Genera un token (puedes usar JWT en producción)
+                String token = generateToken(user);
 
-                // Prepara la respuesta
+                // Respuesta con token y redirección
                 Map<String, String> response = new HashMap<>();
                 response.put("token", token);
-                response.put("role", user.getRole());  // Incluye el rol
-                response.put("continueUrl", "/register/empleados/create");
+                response.put("role", user.getRole());
+                response.put("continueUrl", "/create");
 
                 return ResponseEntity.ok(response);
             } else {
@@ -63,31 +68,27 @@ public class HomeController {
         }
     }
 
-    // Método simulado para generar un token
-    private String generateToken(User user) {
-        // Aquí podrías generar un JWT o algún otro tipo de token
-        return "tokenGenerado";  // Debería ser un token real
-    }
-
-    @PostMapping("/register/empleados/create")
+    /**
+     * Método para registrar empleados, accesible solo por administradores
+     * @param continueUrl URL opcional para redirección
+     * @return Redirección a la URL proporcionada o a la predeterminada
+     */
+    @PostMapping("/create")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> register(@RequestParam(required = false) String continueUrl) {
-        // Verifica si la solicitud es de tipo OPTIONS (preflight)
-        if ("OPTIONS".equalsIgnoreCase(RequestContextHolder.currentRequestAttributes().getAttribute("javax.servlet.request.method", RequestAttributes.SCOPE_REQUEST).toString())) {
-            // No redirigir en preflight
-            return ResponseEntity.ok().build();
-        }
-
-        // Si el parámetro 'continueUrl' está presente, redirige a esa URL
-        if (continueUrl != null && !continueUrl.isEmpty()) {
-            URI uri = URI.create(continueUrl);
-            return ResponseEntity.status(HttpStatus.FOUND).location(uri).build();
-        }
-
-        // Si no se proporciona 'continueUrl', redirige a la URL predeterminada
-        URI uri = URI.create("http://localhost:3000/v1/register/empleados/create");
+        // Aquí, si el parámetro continueUrl no está presente o está vacío, se redirige a la página de creación de empleado
+        URI uri = URI.create(continueUrl != null && !continueUrl.isEmpty() ? continueUrl : "http://localhost:8080/create");
         return ResponseEntity.status(HttpStatus.FOUND).location(uri).build();
     }
 
 
+    /**
+     * Método simulado para generar un token
+     * @param user Usuario para el que se genera el token
+     * @return Token generado
+     */
+    private String generateToken(User user) {
+        // Genera un token simulado (usa JWT en un proyecto real)
+        return "token_" + user.getUsername() + "_secure";
+    }
 }
