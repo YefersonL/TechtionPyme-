@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("")
 @RequiredArgsConstructor
 public class HomeController {
 
@@ -37,7 +37,7 @@ public class HomeController {
     private PasswordEncoder passwordEncoder;  // Inyecta el PasswordEncoder
 
 
-    @PostMapping("/login")
+    @GetMapping("/login")
     public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
         // Busca el usuario por el nombre de usuario
         User user = userRepository.findUserByUsername(username);
