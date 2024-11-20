@@ -9,7 +9,8 @@
 <body>
     <div class="container">
         <h2 class="my-4">Crear Empleado</h2>
-        <form action="/create" method="POST">
+        <!-- Asegúrate de que el token de autenticación (si usas JWT) esté incluido en los headers -->
+        <form action="/empleados/create" method="POST">
             <div class="form-group">
                 <label for="nombre">Nombre:</label>
                 <input type="text" id="nombre" name="nombre" class="form-control" required>
@@ -29,5 +30,29 @@
             <button type="submit" class="btn btn-primary">Registrar</button>
         </form>
     </div>
+
+    <!-- Puedes agregar aquí un script para enviar el token de autenticación si es necesario -->
+    <script>
+        // Aquí puedes agregar un token de autenticación (si usas JWT) en los headers del formulario o en la solicitud AJAX
+        // Ejemplo con AJAX:
+        /*
+        fetch('/empleados/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                nombre: 'Juan Pérez',
+                cargo: 'Desarrollador',
+                email: 'juan.perez@email.com',
+                telefono: '123456789'
+            })
+        })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error(error));
+        */
+    </script>
 </body>
 </html>

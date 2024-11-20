@@ -30,7 +30,7 @@
 </head>
 <body>
     <h2>Iniciar Sesión</h2>
-    <form id="loginForm" action="http://localhost:8080/create" method="POST">
+    <form id="loginForm">
         <div class="form-group">
             <label for="username">Usuario:</label>
             <input type="text" id="username" name="username" class="form-control" placeholder="Ingrese su usuario" required>
@@ -41,5 +41,40 @@
         </div>
         <button type="submit" class="btn btn-primary">Ingresar</button>
     </form>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Capturar los valores del formulario
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // Hacer la solicitud POST al backend para autenticación
+            fetch('http://localhost:8080/login?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password), {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.token) {
+                    // Si el login es exitoso, almacenar el token en el almacenamiento local o sesión
+                    localStorage.setItem("token", data.token);
+                    localStorage.setItem("role", data.role);
+
+                    // Redirigir al usuario a la página de creación de empleados
+                    window.location.href = data.continueUrl;
+                } else {
+                    alert("Error: " + data);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Hubo un error en la autenticación.");
+            });
+        });
+    </script>
 </body>
 </html>
