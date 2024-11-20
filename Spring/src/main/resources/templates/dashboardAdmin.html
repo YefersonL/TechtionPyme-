@@ -4,8 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Administrador - Dashboard</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="estiloAdmin.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link id="changeable-colors" rel="stylesheet" href="css/colors/orange.css">
 </head>
 <body>
     <div class="container my-4">
@@ -15,6 +18,7 @@
         <div class="row text-center mt-4">
             <div class="col-md-3">
                 <div class="card">
+                    <img src="images/logo.png" class="card-img-top" alt="Empleados">
                     <div class="card-body">
                         <h5 class="card-title">Empleados</h5>
                         <p class="card-text">25 registrados</p>
@@ -23,6 +27,7 @@
             </div>
             <div class="col-md-3">
                 <div class="card">
+                    <img src="images/logo.png" class="card-img-top" alt="Pedidos">
                     <div class="card-body">
                         <h5 class="card-title">Pedidos</h5>
                         <p class="card-text">120 este mes</p>
@@ -31,6 +36,7 @@
             </div>
             <div class="col-md-3">
                 <div class="card">
+                    <img src="images/logo.png" class="card-img-top" alt="Proveedores">
                     <div class="card-body">
                         <h5 class="card-title">Proveedores</h5>
                         <p class="card-text">8 activos</p>
@@ -39,6 +45,7 @@
             </div>
             <div class="col-md-3">
                 <div class="card">
+                    <img src="images/logo.png" class="card-img-top" alt="Ganancias">
                     <div class="card-body">
                         <h5 class="card-title">Ganancias</h5>
                         <p class="card-text">$5,000 netas</p>
@@ -51,9 +58,11 @@
         <div class="row mt-5">
             <div class="col-md-6">
                 <canvas id="ordersChart"></canvas>
+                <img src="images/logo.png" alt="Gráfico de Pedidos" style="width: 100%; display: none;" id="chart1Placeholder">
             </div>
             <div class="col-md-6">
                 <canvas id="profitsChart"></canvas>
+                <img src="images/logo.png" alt="Gráfico de Ganancias" style="width: 100%; display: none;" id="chart2Placeholder">
             </div>
         </div>
     </div>
@@ -72,13 +81,13 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>01/11/2024</td>
+                        <td><img src="images/logo.png" alt="Fecha" style="width: 20px;"> 01/11/2024</td>
                         <td>Proveedor A</td>
                         <td>$500</td>
                         <td>Pagado</td>
                     </tr>
                     <tr>
-                        <td>05/11/2024</td>
+                        <td><img src="images/logo.jpg" alt="Fecha" style="width: 20px;"> 05/11/2024</td>
                         <td>Proveedor B</td>
                         <td>$700</td>
                         <td>Pendiente</td>
@@ -88,7 +97,6 @@
         </div>
     </div>
     
-
     <!-- Script para gráficos -->
     <script>
         // Gráfico de Pedidos Mensuales
