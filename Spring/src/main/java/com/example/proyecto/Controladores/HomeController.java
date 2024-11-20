@@ -4,15 +4,11 @@ import com.example.proyecto.LogicaDeNegocio.User;
 import com.example.proyecto.Persistencia.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -23,11 +19,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class HomeController {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;  // Codificador de contraseñas
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;  // Codificador de contraseñas, ya definido en SecurityConfig
 
     /**
      * Endpoint para mostrar el home privado
@@ -73,14 +66,13 @@ public class HomeController {
      * @param continueUrl URL opcional para redirección
      * @return Redirección a la URL proporcionada o a la predeterminada
      */
-    @PostMapping("/create")
+    @PostMapping("/crear")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> register(@RequestParam(required = false) String continueUrl) {
-        // Aquí, si el parámetro continueUrl no está presente o está vacío, se redirige a la página de creación de empleado
-        URI uri = URI.create(continueUrl != null && !continueUrl.isEmpty() ? continueUrl : "http://localhost:8080/create");
+        // Verifica que la URL de continuación no esté vacía o nula
+        URI uri = URI.create(continueUrl != null && !continueUrl.isEmpty() ? continueUrl : "/empleados/create");
         return ResponseEntity.status(HttpStatus.FOUND).location(uri).build();
     }
-
 
     /**
      * Método simulado para generar un token
