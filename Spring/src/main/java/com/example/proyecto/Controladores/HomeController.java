@@ -50,7 +50,7 @@ public class HomeController {
                 Map<String, String> response = new HashMap<>();
                 response.put("token", token);
                 response.put("role", user.getRole());
-                response.put("continueUrl", "/admin_dashboard.html");
+                response.put("continueUrl", "/dashboardAdmin.html");
 
                 return ResponseEntity.ok(response);
             } else {
@@ -61,23 +61,14 @@ public class HomeController {
         }
     }
 
-    @GetMapping("/admin_dashboard.html")
-    public String showAdminDashboard() {
-        return "redirect:/admin_dashboard.html";  // Redirige a /admin_dashboard.html en static
-    }
+
 
     /**
      * Método para registrar empleados, accesible solo por administradores
      * @param continueUrl URL opcional para redirección
      * @return Redirección a la URL proporcionada o a la predeterminada
      */
-    @PostMapping("/crear")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> register(@RequestParam(required = false) String continueUrl) {
-        // Verifica que la URL de continuación no esté vacía o nula
-        URI uri = URI.create(continueUrl != null && !continueUrl.isEmpty() ? continueUrl : "/empleados/create");
-        return ResponseEntity.status(HttpStatus.FOUND).location(uri).build();
-    }
+
 
     /**
      * Método simulado para generar un token

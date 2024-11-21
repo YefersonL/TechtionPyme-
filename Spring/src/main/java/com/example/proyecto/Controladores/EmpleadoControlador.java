@@ -2,6 +2,8 @@ package com.example.proyecto.Controladores;
 
 import com.example.proyecto.LogicaDeNegocio.Empleado;
 import com.example.proyecto.Services.EmpleadoService;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +19,40 @@ public class EmpleadoControlador {
     private EmpleadoService empleadoService;
 
     @PostMapping("/create")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @CrossOrigin(origins = "http://127.0.0.1:8080")
+    @PreAuthorize("hasAuthority('ADMIN')") // Asegura que solo los usuarios con el rol ADMIN puedan crear un empleado
     public ResponseEntity<Map<String, String>> createEmpleado(@RequestBody Map<String, Object> empleadoData) {
-        // Llamada al servicio para crear el empleado
-        Map<String, String> response = (Map<String, String>) empleadoService.createEmpleado(empleadoData);
+        try {
+            // Llamada al servicio para crear el empleado
+            Object result = empleadoService.createEmpleado(empleadoData);
 
-        // Verifica si la creación fue exitosa o si hubo algún error
-        if (response.containsKey("error")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response); // Si hay error
+            // Verifica si el resultado es del tipo esperado
+            if (result instanceof Map) {
+                Map<String, String> response = (Map<String, String>) result;
+
+                // Verifica si la creación fue exitosa o si hubo algún error
+                if (response.containsKey("error")) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response); // Si hay error
+                }
+
+                // Si la creación es exitosa, responde con una creación exitosa
+                return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            } else {
+                // Si el resultado no es el tipo esperado, se maneja el error de manera adecuada
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "Unexpected response type from the service");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            }
+        } catch (Exception e) {
+            // Captura cualquier excepción no controlada y devuelve un mensaje de error
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "An unexpected error occurred: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
-
-        // Si la creación es exitosa, responde con una creación exitosa
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+
+
 
     @GetMapping
     public List<Empleado> getAllEmpleados() {

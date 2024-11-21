@@ -41,6 +41,19 @@ public class FacturaService {
             return facturaRepository.save(factura);
         }).orElseThrow(() -> new RuntimeException("Factura no encontrada"));
     }
+    public Factura saveFactura(Factura factura) {
+        // Si la factura tiene un id, es una actualización, si no, es una creación
+        if (factura.getId() != null && facturaRepository.existsById(factura.getId())) {
+            // Factura ya existe, por lo que vamos a actualizarla
+            Factura facturaExistente = facturaRepository.findById(factura.getId()).get();
+            facturaExistente.setFecha(factura.getFecha());
+            facturaExistente.setMontoTotal(factura.getMontoTotal());
+            return facturaRepository.save(facturaExistente);
+        } else {
+            // Si no tiene ID, es una nueva factura
+            return facturaRepository.save(factura);
+        }
+    }
 
     // Eliminar factura
     public void deleteFactura(Long id) {

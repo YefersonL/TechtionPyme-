@@ -29,6 +29,9 @@
         .btn-primary {
             width: 100%;
         }
+        .extra-field {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -40,48 +43,81 @@
                 <input type="text" id="nombre" name="nombre" class="form-control" required>
             </div>
             <div class="form-group">
-                <label for="cargo">Cargo:</label>
-                <input type="text" id="cargo" name="cargo" class="form-control" required>
+                <label for="dtype">Cargo:</label>
+                <select id="dtype" name="dtype" class="form-control" required>
+                    <option value="">Selecciona un cargo</option>
+                    <option value="cocinero">Cocinero</option>
+                    <option value="mesero">Mesero</option>
+                </select>
             </div>
             <div class="form-group">
-                <label for="email">Correo electrónico:</label>
-                <input type="email" id="email" name="email" class="form-control" required>
+                <label for="identificacion">Identificación:</label>
+                <input type="text" id="identificacion" name="identificacion" class="form-control" required>
             </div>
             <div class="form-group">
-                <label for="telefono">Teléfono:</label>
-                <input type="tel" id="telefono" name="telefono" class="form-control" required>
+                <label for="salarioBase">Salario:</label>
+                <input type="number" id="salarioBase" name="salarioBase" class="form-control" required>
+            </div>
+            <div class="form-group extra-field" id="specialtyField">
+                <label for="especialidad">Especialidad:</label>
+                <input type="text" id="especialidad" name="especialidad" class="form-control">
+            </div>
+            <div class="form-group extra-field" id="shiftField">
+                <label for="turno">Turno:</label>
+                <input type="text" id="turno" name="turno" class="form-control">
             </div>
             <button type="submit" class="btn btn-primary">Registrar</button>
         </form>
     </div>
 
     <script>
+        const dtypeSelect = document.getElementById("dtype");
+        const specialtyField = document.getElementById("specialtyField");
+        const shiftField = document.getElementById("shiftField");
+
+        dtypeSelect.addEventListener("change", function() {
+            const selectedValue = dtypeSelect.value;
+            specialtyField.style.display = "none";
+            shiftField.style.display = "none";
+
+            if (selectedValue === "cocinero") {
+                specialtyField.style.display = "block";
+            } else if (selectedValue === "mesero") {
+                shiftField.style.display = "block";
+            }
+        });
+
         document.getElementById("createEmployeeForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Evita que el formulario se envíe de manera tradicional
-
-            // Obtener los valores del formulario
+            event.preventDefault();
+            
             const nombre = document.getElementById("nombre").value;
-            const cargo = document.getElementById("cargo").value;
-            const email = document.getElementById("email").value;
-            const telefono = document.getElementById("telefono").value;
+            const dtype = document.getElementById("dtype").value;
+            const identificacion = document.getElementById("identificacion").value;
+            const salarioBase = Number(document.getElementById("salarioBase").value);
+            const especialidad = document.getElementById("especialidad").value || null;
+            const turno = document.getElementById("turno").value || null;
 
-            // Crear el objeto de datos
             const data = {
-                nombre: nombre,
-                cargo: cargo,
-                email: email,
-                telefono: telefono
+                dtype,
+                nombre,
+                identificacion,
+                salarioBase,
+                especialidad: dtype === "cocinero" ? especialidad : undefined,
+                turno: dtype === "mesero" ? turno : undefined
             };
 
-            // Obtener el token de autenticación almacenado en localStorage (si lo hay)
             const token = localStorage.getItem("token");
+            if (!token) {
+                alert("No se ha encontrado un token de autenticación. Por favor, inicie sesión.");
+                window.location.href = "/login";
+                return;
+            }
 
-            // Realizar la solicitud POST para crear un nuevo empleado
             fetch('http://localhost:8081/empleados/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` // Incluir el token de autenticación en los headers
+                    'Authorization': 'Bearer ' + token
                 },
                 body: JSON.stringify(data)
             })
@@ -89,8 +125,7 @@
             .then(data => {
                 if (data.success) {
                     alert("Empleado creado exitosamente");
-                    // Redirigir o actualizar la interfaz según sea necesario
-                    window.location.href = "/empleados/list";  // O la URL que desees
+                    window.location.href = "/empleados/list";
                 } else {
                     alert("Error: " + data.message);
                 }

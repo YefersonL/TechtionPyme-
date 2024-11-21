@@ -27,18 +27,19 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/public/**").permitAll()  // Rutas públicas sin autenticación
                         .requestMatchers("/login").permitAll() // Ruta pública para login
-                        .requestMatchers("/admin_dashboard.html").permitAll() // Ruta pública para login
-                        .requestMatchers("/create/empleados").hasAuthority("ADMIN") // Solo ADMIN puede acceder al registro de empleados
-                        .requestMatchers("/static/**", "/admin_dashboard.html","/index.html","/resources/**").permitAll()  // Rutas estáticas (CSS, JS, imágenes)
+                        .requestMatchers("/dashboardAdmin.html").hasAuthority("ADMIN") // Ruta pública para login
+                        .requestMatchers("/empleados/create").permitAll() // Solo ADMIN puede acceder al registro de empleados
+                        .requestMatchers("/facturas/create").permitAll()
+                        .requestMatchers("/static/**", "/dashboardAdmin.html","/index.html","/resources/**").permitAll()  // Rutas estáticas (CSS, JS, imágenes)
                         .anyRequest().authenticated()  // Todas las demás rutas requieren autenticación
-                        
+
                 )
                 .formLogin(form -> form
                         .loginPage("/login")  // Ruta personalizada para el login
                         .loginProcessingUrl("/login")  // Ruta que manejará la autenticación
                         .usernameParameter("username")  // Parámetro del formulario para el nombre de usuario
                         .passwordParameter("password")  // Parámetro del formulario para la contraseña
-                        .defaultSuccessUrl("/admin_dashboard.html", true)  // Redirige a /home tras un login exitoso
+                        .defaultSuccessUrl("/dashboardAdmin", true)  // Redirige a /home tras un login exitoso
                         .failureUrl("/login?error=true")  // Redirige a login si el login falla
                 )
                 .build();

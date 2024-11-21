@@ -11,20 +11,47 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/facturas")
+@CrossOrigin(origins = "http://127.0.0.1:8080")
 public class FacturaControlador {
 
     @Autowired
     private FacturaService facturaService;
 
-    // Crear una factura
-    @PostMapping
-    public ResponseEntity<Factura> createFactura(@RequestBody Factura factura) {
-        Factura nuevaFactura = facturaService.createFactura(factura);
-        return new ResponseEntity<>(nuevaFactura, HttpStatus.CREATED);
+    @PostMapping("/create")
+    public ResponseEntity<Map<String, String>> createFactura(@RequestBody Map<String, Object> facturaData) {
+        try {
+            // Convertir la fecha desde el Map
+            String fechaStr = (String) facturaData.get("fecha");
+            LocalDateTime fecha = LocalDateTime.parse(fechaStr);
+
+            // Convertir montoTotal desde el Map
+            double montoTotal = Double.parseDouble(facturaData.get("montoTotal").toString());
+
+            // Crear una nueva factura
+            Factura factura = new Factura();
+            factura.setFecha(fecha);
+            factura.setMontoTotal(montoTotal);
+
+            // Guardar la factura en la base de datos (esto dependerá de tu lógica de servicio)
+            facturaService.saveFactura(factura);
+
+            // Responder con un mensaje de éxito
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Factura creada exitosamente");
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (Exception e) {
+            // Manejo de excepciones
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Error al crear la factura: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
     }
 
     // Obtener todas las facturas

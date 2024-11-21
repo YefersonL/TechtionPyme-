@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Factura</title>
+</head>
+<body>
+    <h2>Crear Factura</h2>
+    <form id="facturaForm" action="http://localhost:8081/facturas/create" method="POST">
+        <!-- Fecha de la factura -->
+        <label for="fecha">Fecha:</label>
+        <input type="datetime-local" id="fecha" name="fecha" required><br><br>
+
+        <!-- Monto Total de la factura -->
+        <label for="montoTotal">Monto Total:</label>
+        <input type="number" id="montoTotal" name="montoTotal" step="0.01" required><br><br>
+
+        <!-- Enviar el formulario -->
+        <button type="submit">Crear Factura</button>
+    </form>
+
+    <script>
+        // Añadir lógica si se requiere hacer algo adicional con el formulario antes de enviarlo
+        document.getElementById("facturaForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Obtener los datos del formulario
+            let fecha = document.getElementById("fecha").value;
+            let montoTotal = document.getElementById("montoTotal").value;
+
+            // Enviar la solicitud utilizando fetch
+            fetch('http://localhost:8081/facturas/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer token_admin_secure'  // Si tienes autorización en tu backend
+                },
+                body: JSON.stringify({
+                    fecha: fecha,
+                    montoTotal: montoTotal
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert("Error al crear la factura: " + data.error);
+                } else {
+                    alert("Factura creada exitosamente!");
+                }
+            })
+            .catch(error => {
+                alert("Hubo un problema con la creación de la factura: " + error.message);
+            });
+        });
+    </script>
+</body>
+</html>
