@@ -11,6 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import java.util.Arrays;
 
@@ -26,18 +27,20 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/public/**").permitAll()  // Rutas públicas sin autenticación
                         .requestMatchers("/login").permitAll() // Ruta pública para login
+                        .requestMatchers("/admin_dashboard.html").permitAll() // Ruta pública para login
                         .requestMatchers("/create/empleados").hasAuthority("ADMIN") // Solo ADMIN puede acceder al registro de empleados
-                        .requestMatchers("/static/**", "/resources/**").permitAll()  // Rutas estáticas (CSS, JS, imágenes)
+                        .requestMatchers("/static/**", "/admin_dashboard.html","/index.html","/resources/**").permitAll()  // Rutas estáticas (CSS, JS, imágenes)
                         .anyRequest().authenticated()  // Todas las demás rutas requieren autenticación
+                        
                 )
-                .formLogin()
-                .loginPage("/login")  // Ruta personalizada de login
-                .loginProcessingUrl("/login")  // Ruta que manejará la autenticación
-                .usernameParameter("username")  // Parámetro del formulario para el nombre de usuario
-                .passwordParameter("password")  // Parámetro del formulario para la contraseña
-                .defaultSuccessUrl("/home", true)  // Redirige a /home después de un login exitoso
-                .failureUrl("/login?error=true")  // Redirige a login si el login falla
-                .and()
+                .formLogin(form -> form
+                        .loginPage("/login")  // Ruta personalizada para el login
+                        .loginProcessingUrl("/login")  // Ruta que manejará la autenticación
+                        .usernameParameter("username")  // Parámetro del formulario para el nombre de usuario
+                        .passwordParameter("password")  // Parámetro del formulario para la contraseña
+                        .defaultSuccessUrl("/admin_dashboard.html", true)  // Redirige a /home tras un login exitoso
+                        .failureUrl("/login?error=true")  // Redirige a login si el login falla
+                )
                 .build();
     }
 
@@ -49,7 +52,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080"));  // Origen permitido (puedes ajustarlo a tu frontend)
+        configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:8080"));  // Origen permitido (puedes ajustarlo a tu frontend)
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));  // Métodos HTTP permitidos
         configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));  // Encabezados permitidos
         configuration.setAllowCredentials(true);  // Permitir credenciales (cookies, autenticación)
@@ -58,4 +61,9 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);  // Aplica la configuración a todas las rutas
         return source;
     }
+
+
+
+
+
 }

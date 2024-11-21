@@ -51,7 +51,7 @@
             const password = document.getElementById("password").value;
 
             // Hacer la solicitud POST al backend para autenticación
-            fetch('http://localhost:8080/login?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password), {
+            fetch('http://localhost:8081/login?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password), {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -64,7 +64,7 @@
                     localStorage.setItem("token", data.token);
                     localStorage.setItem("role", data.role);
 
-                    // Redirigir al usuario a la página de creación de empleados
+                   
                     window.location.href = data.continueUrl;
                 } else {
                     alert("Error: " + data);

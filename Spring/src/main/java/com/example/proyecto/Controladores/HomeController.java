@@ -25,9 +25,9 @@ public class HomeController {
     /**
      * Endpoint para mostrar el home privado
      */
-    @GetMapping("/home")
+    @GetMapping("/")
     public String home() {
-        return "private home";
+        return "redirect:/index.html"; // Redirige a index.html en static
     }
 
     /**
@@ -50,7 +50,7 @@ public class HomeController {
                 Map<String, String> response = new HashMap<>();
                 response.put("token", token);
                 response.put("role", user.getRole());
-                response.put("continueUrl", "/create");
+                response.put("continueUrl", "/admin_dashboard.html");
 
                 return ResponseEntity.ok(response);
             } else {
@@ -59,6 +59,11 @@ public class HomeController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas.");
         }
+    }
+
+    @GetMapping("/admin_dashboard.html")
+    public String showAdminDashboard() {
+        return "redirect:/admin_dashboard.html";  // Redirige a /admin_dashboard.html en static
     }
 
     /**
