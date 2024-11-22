@@ -1,0 +1,83 @@
+/* Estilo general del cuerpo con transición de imágenes */
+body {
+    font-family: Arial, sans-serif;
+    color: #fff; /* Blanco para contraste */
+    text-align: center;
+    padding-top: 50px;
+    background-size: cover; /* Las imágenes cubren toda la pantalla */
+    background-position: center;
+    background-attachment: fixed; /* La imagen permanece fija al hacer scroll */
+    animation: cambiarFondo 12s infinite; /* Transición entre imágenes */
+}
+
+/* Animación para cambiar de fondo */
+@keyframes cambiarFondo {
+    0% { background-image: url('Galería\ de\ Restaurante\ Bistro\ _\ Metarquitectura\ \ -\ 3.jpg'); } /* Primera imagen */
+    33% { background-image: url('Rest.jpg'); }    /* Segunda imagen */
+    66% { background-image: url('Otro.jpg'); }    /* Tercera imagen */
+    100% { background-image: url('restaurante.jpg'); } /* Vuelve a la primera */
+}
+
+/* Formulario dentro de un recuadro */
+form {
+    max-width: 400px;
+    margin: auto;
+    background: rgba(255, 255, 255, 0.9); /* Fondo blanco con opacidad */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    filter: grayscale(100%); /* Escala de grises para todo el formulario */
+    border: 5px solid rgba(0, 0, 0, 0.2); /* Bordes del recuadro */
+}
+
+/* Recuadro grande que encierra todo el login */
+#login-container {
+    max-width: 600px; /* Tamaño grande */
+    margin: 50px auto;
+    padding: 20px;
+    border: 8px solid rgba(255, 255, 255, 0.5); /* Bordes translúcidos */
+    background: rgba(0, 0, 0, 0.5); /* Fondo negro translúcido */
+    border-radius: 20px; /* Bordes redondeados */
+}
+
+/* Estilo de las etiquetas */
+.form-group label {
+    color: #999; /* Gris claro */
+    font-weight: bold;
+}
+
+/* Estilo de los campos de entrada */
+.form-control {
+    border: 2px solid #666; /* Gris oscuro */
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+/* Placeholder de los campos */
+form input::placeholder {
+    color: #aaa; /* Gris más claro */
+}
+
+/* Botón principal */
+.btn-primary {
+    background-color: #333; /* Gris oscuro */
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+/* Efecto hover en el botón */
+.btn-primary:hover {
+    background-color: #555; /* Gris medio */
+}
+
+/* Encabezado */
+h2 {
+    color: #ccc; /* Gris claro */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
