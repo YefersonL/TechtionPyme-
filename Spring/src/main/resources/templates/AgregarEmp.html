@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Agregar Empleado</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Agregar Empleado</h1>
+        <form>
+            <div class="mb-3">
+                <label for="employeeName" class="form-label">Nombre del Empleado</label>
+                <input type="text" class="form-control" id="employeeName" placeholder="Ingresa el nombre">
+            </div>
+            <div class="mb-3">
+                <label for="employeeEmail" class="form-label">Correo Electrónico</label>
+                <input type="email" class="form-control" id="employeeEmail" placeholder="Ingresa el correo">
+            </div>
+            <div class="mb-3">
+                <label for="employeeRole" class="form-label">Rol</label>
+                <select class="form-select" id="employeeRole">
+                    <option value="admin">Administrador</option>
+                    <option value="user">Usuario</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </form>
+        <div class="text-center mt-4">
+            <button onclick="window.history.back()" class="btn btn-secondary">Volver</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,193 +1,151 @@
-/* dashboardAdmin.css */
-
-/* General Body and Typography Styles */
+/* General styles */
 body {
-    color: #686868;
-    font-size: 14px;
-    font-family: 'Roboto', sans-serif;
-    line-height: 1.80857;
-    background: #E6E6E6;
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #000; /* Fondo oscuro */
+    background-image: url('ruta-a-tu-imagen.jpg'); /* Cambia 'ruta-a-tu-imagen.jpg' por la ubicación de tu imagen */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #fff; /* Texto blanco para contraste */
 }
 
-h1, h2, h5 {
-    color: #1f1f1f;
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-}
-
-h1 {
-    font-size: 36px;
-    text-align: center;
-    font-weight: bold;
-    margin-bottom: 40px;
+h1, h3 {
+    color: #ff7700;
 }
 
 h5 {
-    font-size: 18px;
-    margin-bottom: 15px;
+    color: #fff;
+    font-weight: bold;
 }
 
-a {
-    color: #1f1f1f;
-    text-decoration: none;
-    transition: all 0.3s ease-in-out;
-}
-
-a:hover {
-    color: red;
-    text-decoration: underline;
-}
-
-/* Card Styles */
-.card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background: #fff;
-    transition: all 0.3s ease-in-out;
-    text-align: center;
+.container {
     padding: 20px;
-    margin: 15px 0;
+}
+
+/* Tarjetas informativas */
+.card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card-img-top {
+    width: 100%;
+    height: auto;
+    border-bottom: 2px solid #ff7700;
 }
 
 .card-title {
-    font-size: 22px;
-    font-weight: bold;
-    color: #333;
+    font-size: 1.5em;
+    margin-bottom: 10px;
 }
 
 .card-text {
-    font-size: 16px;
-    color: #555;
+    font-size: 1.2em;
+    color: #ccc; /* Texto claro para mejor contraste */
 }
 
-/* Table Styles */
-table {
+/* Gráficos */
+canvas {
+    max-width: 100%;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Tablas */
+.table {
     width: 100%;
     margin: 20px 0;
-    border-collapse: collapse;
-    background: #fff;
+    background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-thead th {
-    background: #202020;
+.table thead {
+    background-color: #ff7700;
     color: #fff;
-    text-align: left;
-    padding: 12px;
-    font-size: 16px;
-    text-transform: uppercase;
 }
 
-tbody td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    font-size: 14px;
+.table th, .table td {
+    text-align: center;
+    padding: 15px;
 }
 
-tbody tr:nth-child(odd) {
-    background: #f9f9f9;
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #222; /* Fila impar con fondo oscuro */
+    color: #fff; /* Texto blanco */
 }
 
-tbody tr:hover {
-    background: #f1f1f1;
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #444; /* Fila par con fondo gris oscuro */
+    color: #fff; /* Texto blanco */
 }
 
-/* Chart Styles */
-canvas {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    margin: 20px auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: block;
+.table-striped tbody tr:hover {
+    background-color: #666; /* Fondo gris claro al pasar el cursor */
+    color: #fff; /* Mantener texto blanco */
 }
 
-/* Buttons */
+/* Botones */
 button {
-    background: #e75b1e;
+    background-color: #444; /* Escala de gris oscuro */
     color: #fff;
-    padding: 10px 20px;
-    font-size: 14px;
     border: none;
-    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    border-radius: 5px;
+    margin: 10px; /* Separación entre botones */
     cursor: pointer;
-    transition: background 0.3s ease-in-out;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 button:hover {
-    background: red;
+    background-color: #666; /* Gris más claro */
+    transform: scale(1.05);
 }
 
-/* Responsive Styles */
-@media (max-width: 768px) {
-    h1 {
-        font-size: 24px;
-    }
-
-    h5 {
-        font-size: 16px;
-    }
-
-    table thead th,
-    table tbody td {
-        font-size: 12px;
-    }
-
-    .card {
-        padding: 15px;
-    }
-
-    canvas {
-        width: 100%;
-    }
+button:active {
+    background-color: #333; /* Gris más oscuro */
+    transform: scale(0.95);
 }
 
-/* Header Area */
-.header {
-    background: #202020;
-    padding: 10px 0;
+/* Centrado de contenido */
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
     text-align: center;
-    color: #fff;
-    font-family: 'Roboto', sans-serif;
-    font-size: 18px;
+    flex-direction: column;
 }
 
-.header a {
-    color: #fff;
-    text-decoration: none;
-    margin: 0 15px;
-    transition: color 0.3s;
-}
-
-.header a:hover {
-    color: #e75b1e;
-}
-
-/* Footer Area */
-.footer {
-    background: #202020;
-    padding: 10px 0;
+/* Footer */
+footer {
     text-align: center;
+    padding: 20px 0;
+    background-color: #333;
     color: #fff;
-    margin-top: 20px;
+    margin-top: 40px;
 }
 
-.footer a {
-    color: #fff;
+footer a {
+    color: #ff7700;
     text-decoration: none;
 }
 
-.footer a:hover {
-    text-decoration: underline;
+footer a:hover {
+    color: #ff4500;
 }

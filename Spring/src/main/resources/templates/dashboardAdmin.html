@@ -58,6 +58,198 @@
         <div class="row mt-5">
             <div class="col-md-6">
                 <canvas id="ordersChart"></canvas>
+            </div>
+            <div class="col-md-6">
+                <canvas id="profitsChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h3 class="text-center">Pagos Recientes</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Proveedor</th>
+                        <th>Monto</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>01/11/2024</td>
+                        <td>Proveedor A</td>
+                        <td>$500</td>
+                        <td>Pagado</td>
+                    </tr>
+                    <tr>
+                        <td>05/11/2024</td>
+                        <td>Proveedor B</td>
+                        <td>$700</td>
+                        <td>Pendiente</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="text-center mt-5">
+        <button id="addEmployeeBtn" class="btn btn-primary btn-lg">Agregar Empleados</button>
+    </div>
+    
+    <script>
+        document.getElementById('addEmployeeBtn').addEventListener('click', function () {
+            const confirmRedirect = confirm('¿Estás seguro de que deseas agregar un nuevo empleado?');
+            if (confirmRedirect) {
+                // Redirige a la página de creación de empleado
+                window.location.href = 'AgregarEmp.html';
+            }
+        });
+    </script>
+    
+    
+
+    <div class="text-center mt-5">
+        <button onclick="window.location.href='/login_configuration/facturas.html'" class="btn btn-primary btn-lg">
+            Agregar Factura
+        </button>
+    </div>
+
+    <!-- Script para gráficos -->
+    <script>
+        // Gráfico de Pedidos
+        const ordersCtx = document.getElementById('ordersChart').getContext('2d');
+        new Chart(ordersCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+                datasets: [{
+                    label: 'Pedidos',
+                    data: [50, 70, 100, 120, 90],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#000' }
+                    },
+                    x: {
+                        ticks: { color: '#000' }
+                    }
+                },
+                animation: {
+                    duration: 2000,
+                    easing: 'easeOutBounce'
+                }
+            }
+        });
+
+        // Gráfico de Ganancias
+        const profitsCtx = document.getElementById('profitsChart').getContext('2d');
+        new Chart(profitsCtx, {
+            type: 'line',
+            data: {
+                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+                datasets: [{
+                    label: 'Ganancias ($)',
+                    data: [2000, 2500, 3000, 4000, 3500],
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#000' }
+                    },
+                    x: {
+                        ticks: { color: '#000' }
+                    }
+                },
+                animation: {
+                    duration: 1500,
+                    easing: 'easeInOutQuart'
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Administrador - Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="estiloAdmin.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link id="changeable-colors" rel="stylesheet" href="css/colors/orange.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+    <div class="container my-4">
+        <h1 class="text-center">Panel de Control del Administrador</h1>
+        
+         Tarjetas informativas 
+        <div class="row text-center mt-4">
+            <div class="col-md-3">
+                <div class="card">
+                    <img src="images/logo.png" class="card-img-top" alt="Empleados">
+                    <div class="card-body">
+                        <h5 class="card-title">Empleados</h5>
+                        <p class="card-text">25 registrados</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <img src="images/logo.png" class="card-img-top" alt="Pedidos">
+                    <div class="card-body">
+                        <h5 class="card-title">Pedidos</h5>
+                        <p class="card-text">120 este mes</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <img src="images/logo.png" class="card-img-top" alt="Proveedores">
+                    <div class="card-body">
+                        <h5 class="card-title">Proveedores</h5>
+                        <p class="card-text">8 activos</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <img src="images/logo.png" class="card-img-top" alt="Ganancias">
+                    <div class="card-body">
+                        <h5 class="card-title">Ganancias</h5>
+                        <p class="card-text">$5,000 netas</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         Gráficos 
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <canvas id="ordersChart"></canvas>
                 <img src="images/logo.png" alt="Gráfico de Pedidos" style="width: 100%; display: none;" id="chart1Placeholder">
             </div>
             <div class="col-md-6">
@@ -110,7 +302,7 @@
         </div>
 
     
-    <!-- Script para gráficos -->
+     Script para gráficos 
     <script>
         // Gráfico de Pedidos Mensuales
         const ordersCtx = document.getElementById('ordersChart').getContext('2d');
@@ -160,6 +352,12 @@
                 }
             }
         });
+        <div class="charts-container">
+  <canvas id="empleadosChart"></canvas>
+  <canvas id="gananciasChart"></canvas>
+</div>
+
     </script>
 </body>
 </html>
+-->
