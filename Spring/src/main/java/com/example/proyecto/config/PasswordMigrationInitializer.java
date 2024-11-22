@@ -3,7 +3,7 @@
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 public class PasswordMigrationInitializer {
     private final PasswordMigrationService passwordMigrationService;
 
@@ -11,7 +11,7 @@ public class PasswordMigrationInitializer {
         this.passwordMigrationService = passwordMigrationService;
     }
 
-    //@PostConstruct
+    @PostConstruct
     public void init() {
         passwordMigrationService.migratePasswords();
     }
